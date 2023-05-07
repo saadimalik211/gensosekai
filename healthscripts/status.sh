@@ -26,9 +26,6 @@ echo -e "Host Disk:\n$tmp live: $tmp2"
 #tmp=`apcaccess | grep LOAD`
 #echo -e "UPS Power Load: $tmp"
 
-#certbotmail.log
-
-
 #ramdisk peak 10
 tmp=`cat /opt/logs/ramdisk.log | sort -rk4 | head -10`
 tmp2=`df -h | grep ramdisk | awk '{print $5}'`
