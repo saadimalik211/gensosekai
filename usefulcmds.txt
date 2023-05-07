@@ -1,0 +1,6 @@
+
+find / -xdev -printf '%h\n' | sort | uniq -c | sort -k 1 -n
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This will dump a list of every directory on the filesystem prefixed with the number of files (and subdirectories) in that directory. Thus the directory with the largest number of files will be at the bottom.
+
+

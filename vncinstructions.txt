@@ -1,0 +1,7 @@
+VNC is all setup.
+
+Just run vncserver as saad....
+
+For laptop: -geometry 1300x730
+
+Then forward 5901 back to client PC, and connect to localhost:5901.
