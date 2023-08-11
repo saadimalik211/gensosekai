@@ -22,10 +22,6 @@ tmp=`tail -n 1 /opt/logs/hostdisk.log`
 tmp2=`df -h | grep sda6 | awk '{print $5}'`
 echo -e "Host Disk:\n$tmp live: $tmp2"
 
-#UPS power load
-#tmp=`apcaccess | grep LOAD`
-#echo -e "UPS Power Load: $tmp"
-
 #ramdisk peak 10
 tmp=`cat /opt/logs/ramdisk.log | sort -rk4 | head -10`
 tmp2=`df -h | grep ramdisk | awk '{print $5}'`
