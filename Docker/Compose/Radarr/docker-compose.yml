@@ -1,0 +1,52 @@
+version: '3.3'
+
+services:
+  Radarr:
+    container_name: Radarr
+
+    image: linuxserver/radarr
+
+    volumes:
+      - /mnt/raid5/DockerVolumes/TransmissionDownloads:/downloads
+      - /mnt/raid5/DockerVolumes/PlexData:/movies
+      - RadarrConfig:/config
+
+    environment:
+      PUID: 0
+      PGID: 0
+      TZ: "America/New_York"
+
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: WebGateway
+      traefik.http.routers.radarr-secure.entrypoints: websecure
+      traefik.http.routers.radarr-secure.rule: Host(`radarr.gensosekai.com`)
+      traefik.http.routers.radarr-secure.middlewares: middlewares-oauth@file
+      traefik.http.routers.radarr-secure.service: radarr
+      traefik.http.routers.radarr-secure.tls: "true"
+      traefik.http.routers.radarr-secure.tls.certresolver: lets-encrypt
+      traefik.http.services.radarr.loadbalancer.server.port: 7878
+
+
+
+    networks:
+      WebGateway:
+        ipv4_address: 10.10.10.21
+
+    domainname: gensosekai.com
+    hostname: Radarr
+    restart: unless-stopped
+
+
+volumes:
+  RadarrConfig:
+    external: true
+  PlexData:
+    external: true
+  TransmissionDownloads:
+    external: true
+
+networks:
+  WebGateway:
+    external: true
+
