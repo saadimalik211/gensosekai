@@ -19,6 +19,7 @@ services:
       traefik.docker.network: proxy
       traefik.http.routers.tautulli-secure.entrypoints: websecure
       traefik.http.routers.tautulli-secure.rule: Host(`tautulli.gensosekai.com`)
+      traefik.http.routers.tautulli-secure.middlewares: middlewares-oauth@file
       traefik.http.routers.tautulli-secure.service: tautulli
       traefik.http.routers.tautulli-secure.tls: 'true'
       traefik.http.routers.tautulli-secure.tls.certresolver: lets-encrypt

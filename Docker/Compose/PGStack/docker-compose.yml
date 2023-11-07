@@ -1,0 +1,132 @@
+version: '3.7'
+
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: Prometheus
+    environment:
+      PUID: 1003
+      PGID: 1005
+    volumes:
+      - PrometheusData:/prometheus
+      - /mnt/raid5/DockerVolumes/PrometheusYML/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.prometheus-secure.entrypoints=websecure"
+      - "traefik.http.routers.prometheus-secure.rule=Host(`prometheus.gensosekai.com`)"
+      - "traefik.http.routers.prometheus-secure.middlewares=middlewares-oauth@file"
+      - "traefik.http.routers.prometheus-secure.service=prometheus"
+      - "traefik.http.routers.prometheus-secure.tls=true"
+      - "traefik.http.routers.prometheus-secure.tls.certresolver=lets-encrypt"
+      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+    networks:
+      WebGateway:
+        ipv4_address: 10.10.10.243
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: Grafana
+    environment:
+      PUID: 1003
+      PGID: 1005
+    volumes:
+      - GrafanaData:/var/lib/grafana
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana-secure.entrypoints=websecure"
+      - "traefik.http.routers.grafana-secure.rule=Host(`grafana.gensosekai.com`)"
+      - "traefik.http.routers.grafana-secure.middlewares=middlewares-oauth@file"
+      - "traefik.http.routers.grafana-secure.service=grafana"
+      - "traefik.http.routers.grafana-secure.tls=true"
+      - "traefik.http.routers.grafana-secure.tls.certresolver=lets-encrypt"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+    networks:
+      WebGateway:
+        ipv4_address: 10.10.10.244
+    restart: unless-stopped
+
+  grafana-agent:
+    image: grafana/agent:latest
+    container_name: GrafanaAgent
+    environment:
+      PUID: 1003
+      PGID: 1005
+    volumes:
+      - ./agent-config.yml:/etc/agent/agent-config.yml
+    command:
+      - '--config.file=/etc/agent/agent-config.yml'
+    restart: unless-stopped
+    networks:
+      WebGateway:
+        ipv4_address: 10.10.10.245
+
+  nodeexporter:
+    image: prom/node-exporter
+    container_name: NodeExporter
+    environment:
+      PUID: 1003
+      PGID: 1005
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points'
+      - '^/(sys|proc|dev|host|etc)($$|/)'
+    ports:
+      - "9100:9100"
+    networks:
+      WebGateway:
+        ipv4_address: 10.10.10.246
+    restart: unless-stopped
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cAdvisor
+    environment:
+      PUID: 1003
+      PGID: 1005
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    command:
+      - --docker_only=true
+      - --housekeeping_interval=30s
+      - --disable_metrics=percpu,sched,disk,diskIO,accelerator,hugetlb,referenced_memory,cpu_topology,resctrl
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.cadvisor.entrypoints=websecure"
+      - "traefik.http.routers.cadvisor.rule=Host(`cadvisor.gensosekai.com`)"
+      - "traefik.http.routers.cadvisor.middlewares=middlewares-oauth@file"
+      - "traefik.http.routers.cadvisor.service=cadvisor"
+      - "traefik.http.routers.cadvisor.tls=true"
+      - "traefik.http.routers.cadvisor.tls.certresolver=lets-encrypt"
+      - "traefik.http.services.cadvisor.loadbalancer.server.port=8080"
+    networks:
+      WebGateway:
+        ipv4_address: 10.10.10.247
+    restart: unless-stopped
+
+volumes:
+  PrometheusData:
+    external: true
+  PrometheusYML:
+    external: true
+  GrafanaData:
+    external: true
+
+networks:
+  WebGateway:
+    external: true
+

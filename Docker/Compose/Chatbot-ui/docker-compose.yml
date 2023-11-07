@@ -1,0 +1,25 @@
+version: '3'
+services:
+  chatbot-ui:
+    container_name: Chatbot-UI
+    image: ghcr.io/mckaywrigley/chatbot-ui:main
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.chatbot.rule=Host(`chat.gensosekai.com`)"
+      - "traefik.http.routers.chatbot.entrypoints=websecure"
+      - "traefik.http.routers.chatbot.tls.certresolver=lets-encrypt"
+      - "traefik.http.routers.chatbot.middlewares=middlewares-oauth@file"
+      - "traefik.http.services.chatbot.loadbalancer.server.port=3000"
+    env_file:
+      - chatbot-ui.env
+    networks:
+      WebGateway:
+        ipv4_address: 10.10.10.13
+    domainname: gensosekai.com
+    hostname: chat
+    restart: unless-stopped
+
+networks:
+  WebGateway:
+    external: true
+

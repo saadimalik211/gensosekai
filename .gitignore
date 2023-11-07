@@ -1,2 +1,4 @@
 Docker/Compose/Transmission/Transmission.env
 Docker/Compose/Plex/Plex.env
+Docker/Compose/Chatbot-ui/chatbot-ui.env
+Docker/Compose/PGStack/agent-config.yml
