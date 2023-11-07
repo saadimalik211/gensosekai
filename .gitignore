@@ -6,3 +6,4 @@ Docker/Compose/MediaStack/archive/Plex/Plex.env
 Docker/Compose/MediaStack/archive/Transmission/Transmission.env
 Docker/Compose/MediaStack/Plex.env
 Docker/Compose/MediaStack/Transmission.env
+Docker/Compose/Traefik/oauth.env

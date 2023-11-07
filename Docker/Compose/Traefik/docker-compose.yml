@@ -1,0 +1,66 @@
+version: '3.7'
+
+services:
+  Traefik:
+    container_name: Traefik
+    image: traefik:latest
+    command:
+      - --api
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.jnlp.address=:50000
+      - --api.dashboard=true
+      - --providers.file.filename=/traefik_dynamic.yml
+      - --certificatesresolvers.lets-encrypt.acme.email=saadmali211@gmail.com
+      - --certificatesresolvers.lets-encrypt.acme.storage=/acme.json
+      - --certificatesresolvers.lets-encrypt.acme.tlschallenge=true
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /mnt/raid5/DockerVolumes/Traefik/traefik.yml:/traefik.yml
+      - /mnt/raid5/DockerVolumes/Traefik/acme.json:/acme.json
+      - /mnt/raid5/DockerVolumes/Traefik/traefik_dynamic.yml:/traefik_dynamic.yml
+      - TraefikTmp:/tmp
+
+    networks:
+      macvlan:
+        ipv4_address: 192.168.0.251
+      WebGateway:
+        ipv4_address: 10.10.10.251
+    restart: unless-stopped
+
+  oauth:
+    container_name: Traefik_oauth
+    image: thomseddon/traefik-forward-auth:latest
+    env_file:
+      - oauth.env
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      WebGateway:
+        ipv4_address: 10.10.10.252
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik-forward-auth.rule=Host(`oauth.gensosekai.com`)"
+      - "traefik.http.middlewares.traefik-forward-auth.forwardauth.address=http://oauth:4181"
+      - "traefik.http.middlewares.traefik-forward-auth.forwardauth.authResponseHeaders=X-Forwarded-User"
+      - "traefik.http.services.traefik-forward-auth.loadbalancer.server.port=4181"
+      - "traefik.http.routers.traefik-forward-auth.tls=true"
+      - "traefik.http.routers.traefik-forward-auth.tls.certresolver=lets-encrypt"
+
+
+volumes:
+  TraefikTmp:
+    external: true
+
+networks:
+  macvlan:
+    external: true
+  WebGateway:
+    external: true
+
