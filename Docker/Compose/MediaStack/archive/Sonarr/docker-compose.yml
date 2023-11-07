@@ -1,0 +1,46 @@
+version: '3.3'
+
+services:
+  Sonarr:
+    container_name: Sonarr
+    image: linuxserver/sonarr
+    volumes:
+      - /mnt/raid5/DockerVolumes/TransmissionDownloads:/downloads
+      - /mnt/raid5/DockerVolumes/PlexData:/tv
+      - SonarrConfig:/config
+
+    environment:
+      PUID: 1002
+      PGID: 1004
+
+    labels:
+      traefik.enable: 'true'
+      traefik.docker.network: WebGateway
+      traefik.http.routers.sonarr-secure.entrypoints: websecure
+      traefik.http.routers.sonarr-secure.rule: Host(`sonarr.gensosekai.com`)
+      traefik.http.routers.sonarr-secure.middlewares: middlewares-oauth@file
+      traefik.http.routers.sonarr-secure.service: sonarr
+      traefik.http.routers.sonarr-secure.tls: 'true'
+      traefik.http.routers.sonarr-secure.tls.certresolver: lets-encrypt
+      traefik.http.services.sonarr.loadbalancer.server.port: 8989
+
+    networks:
+      WebGateway:
+        ipv4_address: 10.10.10.20
+
+    domainname: gensosekai.com
+    hostname: Sonarr
+    restart: unless-stopped
+
+volumes:
+  SonarrConfig:
+    external: true
+  PlexData:
+    external: true
+  TransmissionDownloads:
+    external: true
+
+networks:
+  WebGateway:
+    external: true
+

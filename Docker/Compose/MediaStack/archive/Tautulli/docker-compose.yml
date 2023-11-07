@@ -1,0 +1,45 @@
+version: '3.3'
+
+services:
+  Tautulli:
+    container_name: Tautulli
+
+    image: linuxserver/tautulli:latest
+
+    volumes:
+      - TautulliConfig:/config
+      - TautulliLogs:/logs
+
+    environment:
+      PUID: 1002
+      PGID: 1004
+
+    labels:
+      traefik.enable: 'true'
+      traefik.docker.network: proxy
+      traefik.http.routers.tautulli-secure.entrypoints: websecure
+      traefik.http.routers.tautulli-secure.rule: Host(`tautulli.gensosekai.com`)
+      traefik.http.routers.tautulli-secure.middlewares: middlewares-oauth@file
+      traefik.http.routers.tautulli-secure.service: tautulli
+      traefik.http.routers.tautulli-secure.tls: 'true'
+      traefik.http.routers.tautulli-secure.tls.certresolver: lets-encrypt
+      traefik.http.services.tautulli.loadbalancer.server.port: 8181
+
+    networks:
+      WebGateway:
+        ipv4_address: 10.10.10.242
+
+    domainname: gensosekai.com
+    hostname: Tautulli
+    restart: unless-stopped
+
+
+volumes:
+  TautulliConfig:
+    external: true
+  TautulliLogs:
+    external: true
+
+networks:
+  WebGateway:
+    external: true

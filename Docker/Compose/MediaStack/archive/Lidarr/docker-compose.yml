@@ -1,0 +1,41 @@
+version: '3.3'
+
+services:
+  Lidarr:
+    container_name: Lidarr
+    image: linuxserver/lidarr
+    volumes:
+      - /mnt/raid5/DockerVolumes/TransmissionDownloads:/downloads
+      - /mnt/raid5/DockerVolumes/PlexData:/music
+      - LidarrConfig:/config
+    environment:
+      PUID: 1002
+      PGID: 1004
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.lidarr-secure.entrypoints=websecure"
+      - "traefik.http.routers.lidarr-secure.rule=Host(`lidarr.gensosekai.com`)"
+      - "traefik.http.routers.lidarr-secure.middlewares=middlewares-oauth@file"
+      - "traefik.http.routers.lidarr-secure.service=lidarr"
+      - "traefik.http.routers.lidarr-secure.tls=true"
+      - "traefik.http.routers.lidarr-secure.tls.certresolver=lets-encrypt"
+      - "traefik.http.services.lidarr.loadbalancer.server.port=8686"
+    networks:
+      WebGateway:
+        ipv4_address: 10.10.10.22
+    domainname: gensosekai.com
+    hostname: Lidarr
+    restart: unless-stopped
+
+networks:
+  WebGateway:
+    external: true
+
+volumes:
+  LidarrConfig:
+    external: true
+  PlexData:
+    external: true
+  TransmissionDownloads:
+    external: true
+

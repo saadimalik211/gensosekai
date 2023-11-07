@@ -1,0 +1,1 @@
+This archive contains the seperated services before they got combined into one docker-compose yaml as 'MediaStack'.
