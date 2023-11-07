@@ -9,9 +9,8 @@ services:
       - /mnt/raid5/DockerVolumes/PlexData:/music
       - LidarrConfig:/config
     environment:
-      PUID: 0
-      PGID: 0
-      TZ: "America/New_York"
+      PUID: 1002
+      PGID: 1004
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.lidarr-secure.entrypoints=websecure"
