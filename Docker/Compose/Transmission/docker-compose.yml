@@ -1,0 +1,51 @@
+version: '3.3'
+
+services:
+  Transmission:
+    container_name: Transmission
+    image: linuxserver/transmission
+    volumes:
+      - TransmissionDownloads:/downloads
+      - PlexData:/data
+      - TransmissionCfg:/config
+      - TransmissionWatch:/watch
+    env_file:
+      - Transmission.env
+    labels:
+      traefik.enable: true
+      traefik.docker.network: WebGateway
+      # Web interface
+      traefik.http.routers.transmission-web.rule: Host(`transmissionweb.gensosekai.com`)
+      traefik.http.routers.transmission-web.entrypoints: websecure
+      traefik.http.routers.transmission-web.service: transmission-web
+      traefik.http.routers.transmission-web.tls: true
+      traefik.http.routers.transmission-web.tls.certresolver: lets-encrypt
+      traefik.http.services.transmission-web.loadbalancer.server.port: 9091
+      # Client access
+      traefik.tcp.routers.transmission-client.rule: HostSNI(`transmission.gensosekai.com`)
+      traefik.tcp.routers.transmission-client.entrypoints: websecure
+      traefik.tcp.routers.transmission-client.service: transmission-client
+      traefik.tcp.routers.transmission-client.tls: true
+      traefik.tcp.routers.transmission-client.tls.certresolver: lets-encrypt
+      traefik.tcp.services.transmission-client.loadbalancer.server.port: 9091
+    networks:
+      WebGateway:
+        ipv4_address: 10.10.10.23
+    domainname: gensosekai.com
+    hostname: Transmission
+    restart: unless-stopped
+
+volumes:
+  TransmissionWatch:
+    external: true
+  TransmissionCfg:
+    external: true
+  TransmissionDownloads:
+    external: true
+  PlexData:
+    external: true
+
+networks:
+  WebGateway:
+    external: true
+
