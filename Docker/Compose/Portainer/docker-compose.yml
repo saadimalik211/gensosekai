@@ -1,0 +1,32 @@
+version: '3.3'
+
+services:
+  Portainer:
+    container_name: Portainer
+    image: portainer/portainer-ce:latest
+    volumes:
+      - Portainer:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      PUID: 1003
+      PGID: 1005
+    labels:
+      traefik.enable: true
+      traefik.docker.network: proxy
+      traefik.http.routers.portainer-secure.entrypoints: websecure
+      traefik.http.routers.portainer-secure.rule: Host(`portainer.gensosekai.com`)
+      traefik.http.routers.portainer-secure.middlewares: middlewares-oauth@file
+      traefik.http.routers.portainer-secure.service: portainer
+      traefik.http.routers.portainer-secure.tls: true
+      traefik.http.routers.portainer-secure.tls.certresolver: lets-encrypt
+      traefik.http.services.portainer.loadbalancer.server.port: 9000
+    networks:
+      WebGateway:
+        ipv4_address: 10.10.10.240
+    restart: unless-stopped
+volumes:
+  Portainer:
+    external: true
+networks:
+  WebGateway:
+    external: true
