@@ -8,3 +8,5 @@ Docker/Compose/MediaStack/Plex.env
 Docker/Compose/MediaStack/Transmission.env
 Docker/Compose/Traefik/oauth.env
 Docker/Compose/PiHole/PiHole.env
+Docker/Compose/Mealie/Mealie.env
+Docker/Compose/Mealie/MealiePostgres.env
