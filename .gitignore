@@ -12,3 +12,6 @@ Docker/Compose/Mealie/Mealie.env
 Docker/Compose/Mealie/MealiePostgres.env
 Docker/Compose/Photoprism/Photoprism.env
 Docker/Compose/Photoprism/PhotoprismDB.env
+Docker/Compose/Box/Box.env
+Docker/Compose/Box/BoxDB.env
+Docker/Compose/Box/BoxRedis.env

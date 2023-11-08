@@ -1,0 +1,71 @@
+version: '3.3'
+services:
+  Box:
+    container_name: Box
+    depends_on:
+      - DB
+      - REDIS
+    image: nextcloud:26.0.1
+    volumes:
+      - NextCloud:/var/www/html
+      - NextCloudData:/var/www/html/data
+    env_file:
+      - Box.env
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: proxy
+      traefik.http.routers.box-secure.entrypoints: websecure
+      traefik.http.routers.box-secure.rule: Host(`box.gensosekai.com`)
+      traefik.http.routers.box-secure.middlewares: box-headers@docker
+      traefik.http.routers.box-secure.service: box
+      traefik.http.routers.box-secure.tls: "true"
+      traefik.http.routers.box-secure.tls.certresolver: lets-encrypt
+      traefik.http.services.box.loadbalancer.server.port: 80
+      traefik.http.middlewares.box-headers.headers.customrequestheaders.X-Forwarded-Proto: "https"
+    networks:
+      WebGateway:
+        ipv4_address: 10.10.10.10
+    restart: unless-stopped
+
+  DB:
+    container_name: BoxDB
+    image: mariadb:10.5
+    restart: unless-stopped
+    volumes:
+      - NextCloudDB:/var/lib/mysql
+    env_file:
+      - BoxDB.env
+    networks:
+      WebGateway:
+        ipv4_address: 10.10.10.11
+    labels:
+      traefik.enable: false
+
+  REDIS:
+    container_name: BoxRedis
+    image: redis:6.2-alpine
+    restart: unless-stopped
+    volumes:
+      - NextCloudRedis:/data
+    env_file:
+      - BoxRedis.env
+    networks:
+      WebGateway:
+        ipv4_address: 10.10.10.12
+    labels:
+      traefik.enable: false
+
+volumes:
+  NextCloud:
+    external: true
+  NextCloudData:
+    external: true
+  NextCloudDB:
+    external: true
+  NextCloudRedis:
+    external: true
+
+networks:
+  WebGateway:
+    external: true
+
