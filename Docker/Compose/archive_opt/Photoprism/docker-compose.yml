@@ -1,0 +1,62 @@
+version: '3.5'
+
+services:
+  Photoprism:
+    container_name: Photoprism
+    image: photoprism/photoprism:latest
+    depends_on:
+      - PhotoprismDB
+    env_file:
+      - Photoprism.env
+    restart: unless-stopped
+    security_opt:
+      - seccomp:unconfined
+      - apparmor:unconfined
+    labels:
+      traefik.enable: 'true'
+      traefik.docker.network: proxy
+      traefik.http.routers.pics-secure.entrypoints: websecure
+      traefik.http.routers.pics-secure.rule: Host(`pics.gensosekai.com`)
+      traefik.http.routers.pics-secure.service: pics
+      traefik.http.routers.pics-secure.tls: 'true'
+      traefik.http.routers.pics-secure.tls.certresolver: lets-encrypt
+      traefik.http.services.pics.loadbalancer.server.port: 2342
+    networks:
+      WebGateway:
+        ipv4_address: 10.10.10.17
+    volumes:
+      - PhotoprismImport:/photoprism/import
+      - PhotoprismStorage:/photoprism/storage
+      - PhotoprismOriginals:/photoprism/originals
+
+  PhotoprismDB:
+    container_name: PhotoprismDB
+    restart: unless-stopped
+    image: mariadb:10.6
+    security_opt:
+      - seccomp:unconfined
+      - apparmor:unconfined
+    command: mysqld --transaction-isolation=READ-COMMITTED --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max-connections=512 --innodb-rollback-on-timeout=OFF --innodb-lock-wait-timeout=120
+    volumes:
+      - PhotoprismDB:/var/lib/mysql
+    labels:
+      traefik.enable: false
+    networks:
+      WebGateway:
+        ipv4_address: 10.10.10.18
+    env_file:
+      - PhotoprismDB.env
+
+volumes:
+  PhotoprismImport:
+    external: true
+  PhotoprismStorage:
+    external: true
+  PhotoprismOriginals:
+    external: true
+  PhotoprismDB:
+    external: true
+
+networks:
+  WebGateway:
+    external: true

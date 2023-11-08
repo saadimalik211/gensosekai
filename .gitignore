@@ -15,3 +15,14 @@ Docker/Compose/Photoprism/PhotoprismDB.env
 Docker/Compose/Box/Box.env
 Docker/Compose/Box/BoxDB.env
 Docker/Compose/Box/BoxRedis.env
+Docker/Compose/archive_opt/Box/Box.env
+Docker/Compose/archive_opt/Box/BoxDB.env
+Docker/Compose/archive_opt/Box/BoxRedis.env
+Docker/Compose/archive_opt/Mealie/Mealie.env
+Docker/Compose/archive_opt/Mealie/MealiePostgres.env
+Docker/Compose/archive_opt/Photoprism/Photoprism.env
+Docker/Compose/archive_opt/Photoprism/PhotoprismDB.env
+Docker/Compose/archive_opt/PiHole/PiHole.env
+Docker/Compose/archive_opt/Plex/Plex.env
+Docker/Compose/archive_opt/Traefik/oauth.env
+Docker/Compose/archive_opt/Transmission/Transmission.env

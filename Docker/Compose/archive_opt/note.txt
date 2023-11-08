@@ -1,0 +1,2 @@
+these are the docker compose directories as they were in /opt/Docker/Compose before being xferred into a repo directory.
+these should generally work but might be quite old or outdated - their primary use is just to serve as an old reference just in case.

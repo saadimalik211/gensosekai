@@ -1,0 +1,28 @@
+version: '3.3'
+
+services:
+  PiHole:
+    container_name: PiHole
+    image: pihole/pihole:latest
+    volumes:
+      - PiHoleCnfg:/etc/pihole
+      - PiHoleDNSMASQ:/etc/dnsmasq.d
+      - /mnt/raid5/DockerVolumes/PiHoleInternal/internal.conf:/etc/dnsmasq.d/02-internal.conf
+      - /mnt/raid5/DockerVolumes/PiHoleInternal/internal.list:/etc/pihole/internal.list
+    env_file:
+      - PiHole.env
+    labels:
+      traefik.enable: false
+    network_mode: "host"
+    cap_add:
+      - NET_ADMIN
+    dns:
+      - 127.0.0.1
+      - 1.1.1.1
+    restart: unless-stopped
+
+volumes:
+  PiHoleCnfg:
+    external: true
+  PiHoleDNSMASQ:
+    external: true
