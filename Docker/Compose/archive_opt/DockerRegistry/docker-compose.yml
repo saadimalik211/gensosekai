@@ -1,0 +1,37 @@
+version: '3.3'
+
+services:
+  DockerRegistry:
+    container_name: DockerRegistry
+    image: registry:2
+    volumes:
+      - DockerRegistryData:/var/lib/registry
+      - DockerRegistryAuth:/auth
+    environment:
+      REGISTRY_HTTP_ADDR: 0.0.0.0:5000
+      REGISTRY_AUTH: htpasswd
+      REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+      REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
+    labels:
+      traefik.enable: 'true'
+      traefik.docker.network: WebGateway
+      traefik.http.routers.dockerregistry-secure.entrypoints: websecure
+      traefik.http.routers.dockerregistry-secure.rule: Host(`docker.gensosekai.com`)
+      traefik.http.routers.dockerregistry-secure.service: dockerregistry
+      traefik.http.routers.dockerregistry-secure.tls: 'true'
+      traefik.http.routers.dockerregistry-secure.tls.certresolver: lets-encrypt
+      traefik.http.services.dockerregistry.loadbalancer.server.port: 5000
+    networks:
+      WebGateway:
+        ipv4_address: 10.10.10.253
+    restart: unless-stopped
+
+networks:
+  WebGateway:
+    external: true
+
+volumes:
+  DockerRegistryData:
+    external: true
+  DockerRegistryAuth:
+    external: true
