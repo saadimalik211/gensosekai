@@ -10,3 +10,5 @@ Docker/Compose/Traefik/oauth.env
 Docker/Compose/PiHole/PiHole.env
 Docker/Compose/Mealie/Mealie.env
 Docker/Compose/Mealie/MealiePostgres.env
+Docker/Compose/Photoprism/Photoprism.env
+Docker/Compose/Photoprism/PhotoprismDB.env
