@@ -2,7 +2,8 @@ version: '3'
 services:
   chatbot-ui:
     container_name: Chatbot-UI
-    image: ghcr.io/mckaywrigley/chatbot-ui:main
+    build:
+      context: ./chatbot-ui  # Specify the path to the Dockerfile and source code
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.chatbot.rule=Host(`chat.gensosekai.com`)"
