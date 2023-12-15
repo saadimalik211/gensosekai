@@ -12,3 +12,81 @@ containers:
       - GrafanaData
       - PrometheusData
       - PrometheusYML
+
+  - name: Box
+    dependencies:
+      - BoxRedis
+      - BoxDB
+    volumes:
+      - NextCloud
+      - NextCloudData
+      - NextCloudDB
+      - NextCloudRedis
+
+  - name: Photoprism
+    dependencies:
+      - PhotoprismDB
+    volumes:
+      - PhotoprismDB
+      - PhotoprismImport
+      - PhotoprismOriginals
+      - PhotoprismStorage
+
+  - name: Mealie
+    dependencies:
+      - MealiePostgres
+    volumes:
+      - Mealie
+      - MealiePostgres
+
+  - name: PiHole
+    dependencies: []
+    volumes:
+      - PiHoleCnfg
+      - PiHoleDNSMASQ
+      - PiHoleInternal
+
+  - name: Traefik
+    dependencies: []
+    volumes:
+      - Traefik
+      - TraefikTmp
+
+  - name: Portainer
+    dependencies: []
+    volumes:
+      - Portainer
+
+  - name: Sonarr
+    dependencies: []
+    volumes:
+      - SonarrConfig
+
+  - name: Radarr
+    dependencies: []
+    volumes:
+      - RadarrConfig
+
+  - name: Lidarr
+    dependencies: []
+    volumes:
+      - LidarrConfig
+
+  - name: Transmission
+    dependencies: []
+    volumes:
+      - TransmissionCfg
+      - TransmissionDownloads
+      - TransmissionWatch
+
+  - name: Plex
+    dependencies: []
+    volumes:
+      - PlexData
+      - PlexDB
+
+  - name: Tautulli
+    dependencies: []
+    volumes:
+      - TautulliConfig
+      - TautulliLogs

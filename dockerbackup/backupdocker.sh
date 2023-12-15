@@ -39,4 +39,8 @@ yq e '.containers[]' "$CONFIG_FILE" -o json | jq -c '.' | while read -r containe
   manage_containers start $dependencies $container_name
 done
 
+
 # Add logging and notification as required
+echo $(date "+%D - %T") --- Docker backup successfully completed. >> /opt/logs/backupdocker.log
+
+
