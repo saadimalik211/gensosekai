@@ -21,6 +21,7 @@ services:
       traefik.http.routers.pics-secure.tls: 'true'
       traefik.http.routers.pics-secure.tls.certresolver: lets-encrypt
       traefik.http.services.pics.loadbalancer.server.port: 2342
+      com.centurylinklabs.watchtower.enable: 'true'
     networks:
       WebGateway:
         ipv4_address: 10.10.10.17

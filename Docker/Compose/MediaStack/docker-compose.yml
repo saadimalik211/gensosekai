@@ -21,6 +21,7 @@ services:
       traefik.http.routers.sonarr-secure.tls: 'true'
       traefik.http.routers.sonarr-secure.tls.certresolver: 'lets-encrypt'
       traefik.http.services.sonarr.loadbalancer.server.port: '8989'
+      com.centurylinklabs.watchtower.enable: 'true'
     networks:
       WebGateway:
         ipv4_address: 10.10.10.20
@@ -46,6 +47,7 @@ services:
       traefik.http.routers.lidarr-secure.tls: 'true'
       traefik.http.routers.lidarr-secure.tls.certresolver: 'lets-encrypt'
       traefik.http.services.lidarr.loadbalancer.server.port: '8686'
+      com.centurylinklabs.watchtower.enable: 'true'
     networks:
       WebGateway:
         ipv4_address: 10.10.10.22
@@ -71,6 +73,7 @@ services:
       traefik.http.routers.radarr-secure.tls: 'true'
       traefik.http.routers.radarr-secure.tls.certresolver: 'lets-encrypt'
       traefik.http.services.radarr.loadbalancer.server.port: '7878'
+      com.centurylinklabs.watchtower.enable: 'true'
     networks:
       WebGateway:
         ipv4_address: 10.10.10.21
@@ -101,6 +104,7 @@ services:
       traefik.tcp.routers.transmission-client.tls: 'true'
       traefik.tcp.routers.transmission-client.tls.certresolver: 'lets-encrypt'
       traefik.tcp.services.transmission-client.loadbalancer.server.port: '9091'
+      com.centurylinklabs.watchtower.enable: 'true'
     networks:
       WebGateway:
         ipv4_address: 10.10.10.23
@@ -125,6 +129,7 @@ services:
       traefik.http.routers.tautulli-secure.tls: 'true'
       traefik.http.routers.tautulli-secure.tls.certresolver: 'lets-encrypt'
       traefik.http.services.tautulli.loadbalancer.server.port: '8181'
+      com.centurylinklabs.watchtower.enable: 'true'
     networks:
       WebGateway:
         ipv4_address: 10.10.10.242
@@ -135,6 +140,7 @@ services:
     image: plexinc/pms-docker:public
     labels:
       traefik.enable: 'false'
+      com.centurylinklabs.watchtower.enable: 'true'
     volumes:
       - PlexData:/data
       - PlexDB:/config

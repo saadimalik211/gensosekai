@@ -17,6 +17,7 @@ services:
       traefik.http.routers.mealie-secure.tls: 'true'
       traefik.http.routers.mealie-secure.tls.certresolver: lets-encrypt
       traefik.http.services.mealie.loadbalancer.server.port: 80
+      com.centurylinklabs.watchtower.enable: 'true'
     networks:
       WebGateway:
         ipv4_address: 10.10.10.15

@@ -1,0 +1,12 @@
+docker ps --format '{{.Names}}: {{.Image}}' | while read line; do
+  container_name=$(echo $line | cut -d: -f1)
+  has_label=$(docker inspect --format '{{ index .Config.Labels "com.centurylinklabs.watchtower.enable" }}' "$container_name")
+  if [ "$has_label" != "true" ]; then
+    echo "$line"
+  fi
+done
+
+
+This small script above will check all containers for the 'com.centurylinklabs.watchtower.enable' label, and output any containers and the accompanying image that DO NOT have this label.
+This is useful for finding any containers/images that are not being monitored by watchtower.
+This can be modified to do checks for other labels (such as checking for Traefik enabled services, for example).

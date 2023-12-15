@@ -25,6 +25,8 @@ services:
       - /mnt/raid5/DockerVolumes/Traefik/acme.json:/acme.json
       - /mnt/raid5/DockerVolumes/Traefik/traefik_dynamic.yml:/traefik_dynamic.yml
       - TraefikTmp:/tmp
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
 
     networks:
       macvlan:
@@ -52,7 +54,7 @@ services:
       - "traefik.http.services.traefik-forward-auth.loadbalancer.server.port=4181"
       - "traefik.http.routers.traefik-forward-auth.tls=true"
       - "traefik.http.routers.traefik-forward-auth.tls.certresolver=lets-encrypt"
-
+      - "com.centurylinklabs.watchtower.enable=true"
 
 volumes:
   TraefikTmp:

@@ -20,6 +20,7 @@ services:
       traefik.http.routers.portainer-secure.tls: true
       traefik.http.routers.portainer-secure.tls.certresolver: lets-encrypt
       traefik.http.services.portainer.loadbalancer.server.port: 9000
+      com.centurylinklabs.watchtower.enable: 'true'
     networks:
       WebGateway:
         ipv4_address: 10.10.10.240

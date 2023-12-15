@@ -24,6 +24,7 @@ services:
       - "traefik.http.routers.prometheus-secure.tls=true"
       - "traefik.http.routers.prometheus-secure.tls.certresolver=lets-encrypt"
       - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+      - "com.centurylinklabs.watchtower.enable=true"
     networks:
       WebGateway:
         ipv4_address: 10.10.10.243
@@ -46,6 +47,7 @@ services:
       - "traefik.http.routers.grafana-secure.tls=true"
       - "traefik.http.routers.grafana-secure.tls.certresolver=lets-encrypt"
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+      - "com.centurylinklabs.watchtower.enable=true"
     networks:
       WebGateway:
         ipv4_address: 10.10.10.244
@@ -62,6 +64,8 @@ services:
     command:
       - '--config.file=/etc/agent/agent-config.yml'
     restart: unless-stopped
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     networks:
       WebGateway:
         ipv4_address: 10.10.10.245
@@ -83,6 +87,8 @@ services:
       - '^/(sys|proc|dev|host|etc)($$|/)'
     ports:
       - "9100:9100"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     networks:
       WebGateway:
         ipv4_address: 10.10.10.246
@@ -113,6 +119,7 @@ services:
       - "traefik.http.routers.cadvisor.tls=true"
       - "traefik.http.routers.cadvisor.tls.certresolver=lets-encrypt"
       - "traefik.http.services.cadvisor.loadbalancer.server.port=8080"
+      - "com.centurylinklabs.watchtower.enable=true"
     networks:
       WebGateway:
         ipv4_address: 10.10.10.247

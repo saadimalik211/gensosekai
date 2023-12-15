@@ -13,6 +13,7 @@ services:
       - PiHole.env
     labels:
       traefik.enable: false
+      com.centurylinklabs.watchtower.enable: 'true'
     network_mode: "host"
     cap_add:
       - NET_ADMIN
