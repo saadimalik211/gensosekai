@@ -1,0 +1,14 @@
+backup_directory: "/mnt/backup/dockerbackup"
+source_directory: "/mnt/raid5/DockerVolumes"
+
+containers:
+  - name: Grafana
+    dependencies:
+      - GrafanaAgent
+      - NodeExporter
+      - cAdvisor
+      - Prometheus
+    volumes:
+      - GrafanaData
+      - PrometheusData
+      - PrometheusYML
