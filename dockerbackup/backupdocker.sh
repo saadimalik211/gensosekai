@@ -5,20 +5,11 @@ CONFIG_FILE="backup-config.yml"
 BACKUP_DIR=$(yq e '.backup_directory' "$CONFIG_FILE")
 SOURCE_DIR=$(yq e '.source_directory' "$CONFIG_FILE")
 
-# Function to perform rsync
-do_rsync() {
-  rsync -avh --delete "${SOURCE_DIR}/$1/" "${BACKUP_DIR}/$1/" || exit 1
-}
+# Source the functions from the separate file
+source backup_functions.sh
 
-# Function to stop and start containers
-manage_containers() {
-  local action=$1
-  shift
-  for container in "$@"; do
-    echo "${action^} container: $container"
-    docker "$action" "$container" || exit 1
-  done
-}
+# Log the start time of the entire script
+log_message "Backup script started."
 
 # Read the containers from the YAML file and backup each container's volumes
 yq e '.containers[]' "$CONFIG_FILE" -o json | jq -c '.' | while read -r container; do
@@ -31,7 +22,6 @@ yq e '.containers[]' "$CONFIG_FILE" -o json | jq -c '.' | while read -r containe
 
   # Backup volumes for the container
   for volume in $volumes; do
-    echo "Backing up volume: $volume"
     do_rsync "$volume"
   done
 
@@ -39,8 +29,5 @@ yq e '.containers[]' "$CONFIG_FILE" -o json | jq -c '.' | while read -r containe
   manage_containers start $dependencies $container_name
 done
 
-
-# Add logging and notification as required
-echo $(date "+%D - %T") --- Docker backup successfully completed. >> /opt/logs/backupdocker.log
-
-
+# Log the end time of the entire script
+log_message "Backup script completed."
