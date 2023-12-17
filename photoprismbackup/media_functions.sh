@@ -7,6 +7,7 @@ extract_date_from_filename() {
     'PXL_([0-9]{4})([0-9]{2})([0-9]{2})' # PXL_YYYYMMDD
     'Screenshot_([0-9]{4})([0-9]{2})([0-9]{2})' # Screenshot_YYYYMMDD
     'signal-([0-9]{4})-([0-9]{2})-([0-9]{2})' # signal-YYYY-MM-DD
+    '([0-9]{4})([0-9]{2})([0-9]{2})_' # YYYYMMDD
     # Add more patterns as needed
     )
     for regex in "${date_regexes[@]}"; do
