@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Load configuration from the YAML file
-CONFIG_FILE="backup-config.yml"
+CONFIG_FILE="/home/saad/git/personal/gensosekai/dockerbackup/backup-config.yml"
 BACKUP_DIR=$(yq e '.backup_directory' "$CONFIG_FILE")
 SOURCE_DIR=$(yq e '.source_directory' "$CONFIG_FILE")
 
 # Source the functions from the separate file
-source backup_functions.sh
+source /home/saad/git/personal/gensosekai/dockerbackup/backup_functions.sh
 
 # Log the start time of the entire script
 log_message "Backup script started."
