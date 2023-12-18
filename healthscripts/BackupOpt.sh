@@ -16,6 +16,3 @@ else
     log_message "ERROR" "/opt backup encountered errors."
     exit 1
 fi
-
-# Log the completion of the backup
-log_message "INFO" "/opt backup successfully completed."
