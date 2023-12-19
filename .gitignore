@@ -27,3 +27,4 @@ Docker/Compose/archive_opt/Plex/Plex.env
 Docker/Compose/archive_opt/Traefik/oauth.env
 Docker/Compose/archive_opt/Transmission/Transmission.env
 Docker/Compose/Chatbot-ui/chatbot-ui
+photoprismbackup/pp_s3_backup-config.yaml
