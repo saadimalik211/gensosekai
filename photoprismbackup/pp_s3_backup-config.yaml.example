@@ -1,0 +1,8 @@
+# Configuration for S3 backup script
+aws:
+  access_key_id: "YOUR_ACCESS_KEY_ID"
+  secret_access_key: "YOUR_SECRET_ACCESS_KEY"
+  s3_bucket: "your-s3-bucket-name"
+  region: "your-aws-region" # e.g., us-west-2
+
+local_backup_directory: "/path/to/PhotoprismOriginals"
