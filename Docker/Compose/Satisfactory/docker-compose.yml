@@ -1,0 +1,20 @@
+version: '3.3'
+
+services:
+  satisfactory-server:
+    container_name: satisfactory-server
+    image: wolveix/satisfactory-server:latest
+    ports:
+      - "7777:7777/udp"       # Game port (UDP)
+      - "7777:7777/tcp"       # Game port (TCP)
+      - "15000:15000/udp"     # Beacon port (UDP)
+      - "15000:15000/tcp"     # Beacon port (TCP)
+      - "15777:15777/udp"     # Query port (UDP)
+      - "15777:15777/tcp"     # Query port (TCP)
+    volumes:
+      - /path/to/SatisfactoryData:/config     # Persistent game data
+    environment:
+      - MAXPLAYERS=4                  # Set max players
+      - STEAMBETA=false               # Use experimental or stable version
+    restart: unless-stopped
+
