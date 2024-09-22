@@ -19,5 +19,5 @@ services:
     restart: unless-stopped
 
 volumes:
-  SatisfactoryData:
+  SatisfactoryData:            # If performance is bad, switch to an SSD based volume.
     external: true
