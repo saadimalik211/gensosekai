@@ -12,9 +12,12 @@ services:
       - "15777:15777/udp"     # Query port (UDP)
       - "15777:15777/tcp"     # Query port (TCP)
     volumes:
-      - /path/to/SatisfactoryData:/config     # Persistent game data
+      - SatisfactoryData:/config     # Persistent game data
     environment:
       - MAXPLAYERS=4                  # Set max players
       - STEAMBETA=false               # Use experimental or stable version
     restart: unless-stopped
 
+volumes:
+  SatisfactoryData:
+    external: true
